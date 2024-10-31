@@ -43,7 +43,19 @@ func subtract(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func multiply(w http.ResponseWriter, r *http.Request) {}
+func multiply(w http.ResponseWriter, r *http.Request) {
+	operation := new(Operation)
+	decodeRequestBody(w, r, operation)
+
+	answer := operation.Number1 * operation.Number2
+	result := &Result{
+		Result: answer,
+	}
+
+	encodeRequestBody(w, r, result)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}
 
 func divide(w http.ResponseWriter, r *http.Request) {}
 
