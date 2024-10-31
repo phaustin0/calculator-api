@@ -197,3 +197,24 @@ func TestDivision(t *testing.T) {
 	}
 	assert.Equal(t, divErr, DivisionByZeroError{Error: "cannot divide by zero"})
 }
+
+func TestSum(t *testing.T) {
+	url := "http://localhost:8000/sum"
+
+	jsonReq := []byte(`{"items":[5, 2, 3, 6, -4, 10, -20]}`)
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonReq))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	var result Result
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, result, Result{Result: 2})
+}

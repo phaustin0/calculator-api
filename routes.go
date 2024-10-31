@@ -11,6 +11,10 @@ type Operation struct {
 	Number2 int `json:"number2"`
 }
 
+type Array struct {
+	Items []int `json:"items"`
+}
+
 type Result struct {
 	Result int `json:"result"`
 }
@@ -85,7 +89,22 @@ func divide(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func sum(w http.ResponseWriter, r *http.Request) {}
+func sum(w http.ResponseWriter, r *http.Request) {
+	array := new(Array)
+	decodeRequestBody(w, r, array)
+
+	answer := 0
+	for _, val := range array.Items {
+		answer += val
+	}
+	result := &Result{
+		Result: answer,
+	}
+
+	encodeRequest(w, r, result)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}
 
 func decodeRequestBody(w http.ResponseWriter, r *http.Request, v any) {
 	err := json.NewDecoder(r.Body).Decode(v)
