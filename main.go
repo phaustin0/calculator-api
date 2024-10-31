@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -16,9 +17,5 @@ func handleRoutes() *http.ServeMux {
 
 func main() {
 	routeHandler := handleRoutes()
-
-	server := &http.Server{
-		Addr:    ":8000",
-		Handler: routeHandler,
-	}
+	log.Fatal(http.ListenAndServe("localhost:8000", routeHandler))
 }
